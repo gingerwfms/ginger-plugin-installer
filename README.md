@@ -1,0 +1,2 @@
+Ginger WfMS plugin installer
+============================
