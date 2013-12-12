@@ -10,7 +10,6 @@ namespace GingerPluginInstallerTest\Composer;
 
 use GingerPluginInstallerTest\TestCase;
 use GingerPluginInstaller\Composer\GingerInstaller;
-use PHPUnit_Framework_TestCase;
 use Composer\Util\Filesystem;
 use Composer\Package\Package;
 use Composer\Package\RootPackage;
@@ -42,6 +41,15 @@ class GingerInstallerTest extends TestCase
         $this->fs = new Filesystem;
 
         $this->composer = new Composer();
+        
+        $root = new RootPackage('gingerwfms/ginger-wfms', '1.0.0', '1.0.0');
+        
+        $root->setExtra(array(
+            'bootstrap' => 'GingerPluginInstallerTest\Mock\BootstrapMock',            
+        ));
+        
+        $this->composer->setPackage($root);
+        
         $this->config = new Config();
         $this->composer->setConfig($this->config);
         
@@ -53,9 +61,8 @@ class GingerInstallerTest extends TestCase
 
         $this->config->merge(array(
             'config' => array(
-                'extra' => array(
-                    'bootstrap' => 'GingerPluginInstallerTest\Mock\BootstrapMock',
-                ),
+                'vendor-dir' => $this->vendorDir,
+                'bin-dir' => $this->binDir,
             )
         ));
 

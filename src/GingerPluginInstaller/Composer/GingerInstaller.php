@@ -43,9 +43,7 @@ class GingerInstaller extends LibraryInstaller
     {
         parent::__construct($io, $composer);
         
-        $extra = $composer->getConfig()->get('extra');
-        
-        print_r($composer->getConfig());
+        $extra = $composer->getPackage()->getExtra();
         
         if (!isset($extra['bootstrap'])) {
             throw new Exception\RuntimeException('No Bootstrap defined. Please add the -bootstrap- definition to the -extra- property of the Ginger WfMS composer.json');
