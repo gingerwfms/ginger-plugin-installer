@@ -43,17 +43,7 @@ class GingerInstaller extends LibraryInstaller
     {
         parent::__construct($io, $composer);
         
-        $extra = $composer->getPackage()->getExtra();
-        
-        if (!isset($extra['bootstrap'])) {
-            throw new Exception\RuntimeException('No Bootstrap defined. Please add the -bootstrap- definition to the -extra- property of the Ginger WfMS composer.json');
-        }
-        
-        $bootstrapClass = $extra['bootstrap'];
-        
-        $bootstrapClass::init();
-        
-        $this->serviceManager = $bootstrapClass::getServiceManager();
+        $this->composer = $composer;
     }
     
     public function supports($packageType)
@@ -68,6 +58,8 @@ class GingerInstaller extends LibraryInstaller
     
     public function install(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
+        $this->initGingerBackend();
+        
         $extra = $package->getExtra();
         
         if (!isset($extra['plugin-namespace'])) {
@@ -94,6 +86,8 @@ class GingerInstaller extends LibraryInstaller
     
     public function update(InstalledRepositoryInterface $repo, PackageInterface $initial, PackageInterface $target)
     {
+        $this->initGingerBackend();
+        
         $newExtra = $target->getExtra();
         
         if (!isset($newExtra['plugin-namespace'])) {
@@ -121,6 +115,8 @@ class GingerInstaller extends LibraryInstaller
     
     public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
+        $this->initGingerBackend();
+        
         parent::uninstall($repo, $package);
         
         $extra = $package->getExtra();
@@ -134,5 +130,20 @@ class GingerInstaller extends LibraryInstaller
         $this->serviceManager->get('malocher.cqrs.gate')
             ->getBus()
             ->invokeCommand($uninstallPluginCommand);
+    }
+    
+    protected function initGingerBackend()
+    {
+        $extra = $this->composer->getPackage()->getExtra();
+        
+        if (!isset($extra['bootstrap'])) {
+            throw new Exception\RuntimeException('No Bootstrap defined. Please add the -bootstrap- definition to the -extra- property of the Ginger WfMS composer.json');
+        }
+        
+        $bootstrapClass = $extra['bootstrap'];
+        
+        $bootstrapClass::init();
+        
+        $this->serviceManager = $bootstrapClass::getServiceManager();
     }
 }
