@@ -68,12 +68,9 @@ class GingerInstaller extends LibraryInstaller
     
     public function install(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
-        parent::install($repo, $package);
-        
         $extra = $package->getExtra();
         
         if (!isset($extra['plugin-namespace'])) {
-            $this->uninstall($repo, $package);
             throw new Exception\RuntimeException(
                 sprintf(
                     'Missing the key -plugin-namespace- in the -extra- property of the plugin -%s- composer.json.',
@@ -81,6 +78,8 @@ class GingerInstaller extends LibraryInstaller
                 )
             );
         }
+        
+        parent::install($repo, $package);
         
         $pluginInstalledEvent = new Cqrs\PluginInstalledEvent(array(
             'plugin_name' => $package->getName(),
