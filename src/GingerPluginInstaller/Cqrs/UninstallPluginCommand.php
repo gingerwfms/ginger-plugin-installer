@@ -9,13 +9,13 @@
 namespace GingerPluginInstaller\Cqrs;
 
 use Malocher\Cqrs\Message\Message;
-use Malocher\Cqrs\Event\EventInterface;
+use Malocher\Cqrs\Command\CommandInterface;
 /**
- * PluginInstalledEvent
+ *  UninstallPluginCommand
  * 
  * @author Alexander Miertsch <kontakt@codeliner.ws>
  */
-class PluginInstalledEvent extends Message implements EventInterface
+class UninstallPluginCommand extends Message implements CommandInterface
 {
     public function getPluginNamespace()
     {

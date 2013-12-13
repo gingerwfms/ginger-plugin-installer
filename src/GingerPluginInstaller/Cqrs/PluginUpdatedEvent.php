@@ -19,7 +19,7 @@ class PluginUpdatedEvent extends Message implements EventInterface
 {
     public function getPluginNamespace()
     {
-        return $this->playload['plugin_namespace'];
+        return $this->payload['plugin_namespace'];
     }
     
     public function getPluginName()

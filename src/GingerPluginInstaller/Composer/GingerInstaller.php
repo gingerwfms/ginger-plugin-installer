@@ -97,7 +97,6 @@ class GingerInstaller extends LibraryInstaller
         $newExtra = $target->getExtra();
         
         if (!isset($newExtra['plugin-namespace'])) {
-            $this->uninstall($repo, $package);
             throw new Exception\RuntimeException(
                 sprintf(
                     'Missing the key -plugin-namespace- in the -extra- property of the new plugin -%s- composer.json.',
@@ -118,5 +117,22 @@ class GingerInstaller extends LibraryInstaller
         $this->serviceManager->get('malocher.cqrs.gate')
             ->getBus()
             ->publishEvent($pluginUpdatedEvent);
+    }
+    
+    public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package)
+    {
+        parent::uninstall($repo, $package);
+        
+        $extra = $package->getExtra();
+        
+        $uninstallPluginCommand = new Cqrs\UninstallPluginCommand(array(
+            'plugin_name' => $package->getName(),
+            'plugin_namespace' => $extra['plugin-namespace'],
+            'plugin_version' => $package->getVersion()
+        ));
+        
+        $this->serviceManager->get('malocher.cqrs.gate')
+            ->getBus()
+            ->invokeCommand($uninstallPluginCommand);
     }
 }
