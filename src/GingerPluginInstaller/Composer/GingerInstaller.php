@@ -119,8 +119,6 @@ class GingerInstaller extends LibraryInstaller
     {
         $this->initGingerBackend();
         
-        parent::uninstall($repo, $package);
-        
         $extra = $package->getExtra();
         
         $uninstallPluginCommand = new Cqrs\UninstallPluginCommand(array(
@@ -133,6 +131,8 @@ class GingerInstaller extends LibraryInstaller
         $this->getServiceManager()->get('malocher.cqrs.gate')
             ->getBus()
             ->invokeCommand($uninstallPluginCommand);
+        
+        parent::uninstall($repo, $package);
     }
     
     /**
