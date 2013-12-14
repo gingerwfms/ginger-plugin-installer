@@ -160,7 +160,7 @@ class GingerInstaller extends LibraryInstaller
         if (!class_exists($bootstrapClass)) {
             $this->composer->getAutoloadGenerator()->createLoader(
                 $this->composer->getPackage()->getAutoload()
-            );
+            )->register();
         }
         
         $bootstrapClass::init();
