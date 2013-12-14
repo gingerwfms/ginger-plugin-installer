@@ -155,13 +155,15 @@ class GingerInstallerTest extends TestCase
         
         $pluginNamespace = '';
         $pluginName = '';
+        $pluginType = '';
         $pluginVersion = '';
         
         $mockBus->registerEventListener(
             'GingerPluginInstaller\Cqrs\PluginInstalledEvent', 
-            function(PluginInstalledEvent $event) use (&$pluginNamespace, &$pluginName, &$pluginVersion) {
+            function(PluginInstalledEvent $event) use (&$pluginNamespace, &$pluginName, &$pluginType, &$pluginVersion) {
                 $pluginNamespace = $event->getPluginNamespace();
                 $pluginName = $event->getPluginName();
+                $pluginType = $event->getPluginType();
                 $pluginVersion = $event->getPluginVersion();
             }
         );
@@ -177,6 +179,7 @@ class GingerInstallerTest extends TestCase
         
         $this->assertSame('WfConfiguratorBackend', $pluginNamespace);
         $this->assertSame('gingerwfms/wf-configurator-backend', $pluginName);
+        $this->assertSame('ginger-backend-plugin', $pluginType);
         $this->assertSame('1.0.0', $pluginVersion);
     }
     
@@ -204,14 +207,16 @@ class GingerInstallerTest extends TestCase
         
         $pluginNamespace = '';
         $pluginName = '';
+        $pluginType = '';
         $pluginOldVersion = '';
         $pluginNewVersion = '';
         
         $mockBus->registerEventListener(
             'GingerPluginInstaller\Cqrs\PluginUpdatedEvent', 
-            function(PluginUpdatedEvent $event) use (&$pluginNamespace, &$pluginName, &$pluginOldVersion, &$pluginNewVersion) {
+            function(PluginUpdatedEvent $event) use (&$pluginNamespace, &$pluginName, &$pluginType, &$pluginOldVersion, &$pluginNewVersion) {
                 $pluginNamespace = $event->getPluginNamespace();
                 $pluginName = $event->getPluginName();
+                $pluginType = $event->getPluginType();
                 $pluginOldVersion = $event->getOldPluginVersion();
                 $pluginNewVersion = $event->getNewPluginVersion();
             }
@@ -232,6 +237,7 @@ class GingerInstallerTest extends TestCase
         
         $this->assertSame('WfConfiguratorBackend', $pluginNamespace);
         $this->assertSame('gingerwfms/wf-configurator-backend', $pluginName);
+        $this->assertSame('ginger-backend-plugin', $pluginType);
         $this->assertSame('1.0.0', $pluginOldVersion);
         $this->assertSame('2.0.0', $pluginNewVersion);
     }
@@ -258,13 +264,15 @@ class GingerInstallerTest extends TestCase
         
         $pluginNamespace = '';
         $pluginName = '';
+        $pluginType = '';
         $pluginVersion = '';
         
         $mockBus->mapCommand(
             'GingerPluginInstaller\Cqrs\UninstallPluginCommand', 
-            function(UninstallPluginCommand $command) use (&$pluginNamespace, &$pluginName, &$pluginVersion) {
+            function(UninstallPluginCommand $command) use (&$pluginNamespace, &$pluginName, &$pluginType, &$pluginVersion) {
                 $pluginNamespace = $command->getPluginNamespace();
                 $pluginName = $command->getPluginName();
+                $pluginType = $command->getPluginType();
                 $pluginVersion = $command->getPluginVersion();
             }
         );
@@ -280,6 +288,7 @@ class GingerInstallerTest extends TestCase
         
         $this->assertSame('WfConfiguratorBackend', $pluginNamespace);
         $this->assertSame('gingerwfms/wf-configurator-backend', $pluginName);
+        $this->assertSame('ginger-backend-plugin', $pluginType);
         $this->assertSame('1.0.0', $pluginVersion);
     }
 }

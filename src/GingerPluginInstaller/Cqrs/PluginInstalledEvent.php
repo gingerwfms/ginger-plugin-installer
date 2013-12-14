@@ -27,6 +27,11 @@ class PluginInstalledEvent extends Message implements EventInterface
         return $this->payload['plugin_name'];
     }
     
+    public function getPluginType()
+    {
+        return $this->payload['plugin_type'];
+    }
+    
     public function getPluginVersion()
     {
         return $this->payload['plugin_version'];

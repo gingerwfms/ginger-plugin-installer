@@ -75,6 +75,7 @@ class GingerInstaller extends LibraryInstaller
         
         $pluginInstalledEvent = new Cqrs\PluginInstalledEvent(array(
             'plugin_name' => $package->getName(),
+            'plugin_type' => $package->getType(),
             'plugin_version' => $package->getVersion(),
             'plugin_namespace' => $extra['plugin-namespace'],
         ));
@@ -103,6 +104,7 @@ class GingerInstaller extends LibraryInstaller
         
         $pluginUpdatedEvent = new Cqrs\PluginUpdatedEvent(array(
             'plugin_name' => $initial->getName(),
+            'plugin_type' => $initial->getType(),
             'plugin_namespace' => $newExtra['plugin-namespace'],
             'old_plugin_version' => $initial->getVersion(),
             'new_plugin_version' => $target->getVersion(),
@@ -123,6 +125,7 @@ class GingerInstaller extends LibraryInstaller
         
         $uninstallPluginCommand = new Cqrs\UninstallPluginCommand(array(
             'plugin_name' => $package->getName(),
+            'plugin_type' => $package->getType(),
             'plugin_namespace' => $extra['plugin-namespace'],
             'plugin_version' => $package->getVersion()
         ));
