@@ -1,5 +1,6 @@
 {
     "name": "gingerwfms/ginger-plugin-installer",
+    "type": "zend-module",
     "description": "Plugin Installer for the Ginger Workflow Management System",
     "license": "BSD-3-Clause",    
     "homepage": "http://www.codeliner.ws/",
@@ -18,7 +19,8 @@
         "installer"
     ],
     "require": {
-        "php": ">=5.4.0"        
+        "php": ">=5.4.0",
+        "composer/installers" : "1.0.*"
     },
     "require-dev" : {
         "phpunit/phpunit": "3.7.*",
