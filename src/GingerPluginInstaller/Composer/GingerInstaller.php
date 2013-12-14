@@ -44,8 +44,6 @@ class GingerInstaller extends LibraryInstaller
         parent::__construct($io, $composer);
         
         $this->composer = $composer;
-        
-        $this->initGingerBackend();
     }
     
     public function supports($packageType)
