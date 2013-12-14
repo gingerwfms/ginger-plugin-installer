@@ -44,6 +44,8 @@ class GingerInstaller extends LibraryInstaller
         parent::__construct($io, $composer);
         
         $this->composer = $composer;
+        
+        $this->initGingerBackend();
     }
     
     public function supports($packageType)
@@ -79,7 +81,7 @@ class GingerInstaller extends LibraryInstaller
             'plugin_namespace' => $extra['plugin-namespace'],
         ));
         
-        $this->serviceManager->get('malocher.cqrs.gate')
+        $this->getServiceManager()->get('malocher.cqrs.gate')
             ->getBus()
             ->publishEvent($pluginInstalledEvent);
     }
@@ -108,7 +110,7 @@ class GingerInstaller extends LibraryInstaller
             'new_plugin_version' => $target->getVersion(),
         ));
         
-        $this->serviceManager->get('malocher.cqrs.gate')
+        $this->getServiceManager()->get('malocher.cqrs.gate')
             ->getBus()
             ->publishEvent($pluginUpdatedEvent);
     }
@@ -127,11 +129,24 @@ class GingerInstaller extends LibraryInstaller
             'plugin_version' => $package->getVersion()
         ));
         
-        $this->serviceManager->get('malocher.cqrs.gate')
+        $this->getServiceManager()->get('malocher.cqrs.gate')
             ->getBus()
             ->invokeCommand($uninstallPluginCommand);
     }
     
+    /**
+     * @return ServiceLocatorInterface
+     */
+    protected function getServiceManager()
+    {
+        if (is_null($this->serviceManager)) {
+            $this->initGingerBackend();
+        }
+        
+        return $this->serviceManager;
+    }
+
+
     protected function initGingerBackend()
     {
         $extra = $this->composer->getPackage()->getExtra();
@@ -141,6 +156,12 @@ class GingerInstaller extends LibraryInstaller
         }
         
         $bootstrapClass = $extra['bootstrap'];
+        
+        if (!class_exists($bootstrapClass)) {
+            $this->composer->getAutoloadGenerator()->createLoader(
+                $this->composer->getPackage()->getAutoload()
+            );
+        }
         
         $bootstrapClass::init();
         
