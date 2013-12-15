@@ -53,7 +53,7 @@ class GingerInstaller extends LibraryInstaller
     
     public function getInstallPath(PackageInterface $package)
     {
-        return 'plugin';
+        return 'plugin/' . $package->getPrettyName();
     }
     
     public function install(InstalledRepositoryInterface $repo, PackageInterface $package)

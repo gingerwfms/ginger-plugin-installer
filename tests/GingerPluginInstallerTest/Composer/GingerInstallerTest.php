@@ -134,7 +134,7 @@ class GingerInstallerTest extends TestCase
 
         $package->setType('ginger-backend-plugin');
         $result = $installer->getInstallPath($package);
-        $this->assertEquals('plugin', $result);
+        $this->assertEquals('plugin/gingerwfms/wf-configurator-backend', $result);
     }
     
     public function testInstall()
